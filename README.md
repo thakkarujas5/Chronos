@@ -70,7 +70,84 @@ Body Parameters:
 }
 ```
 
+### Login '/login'
+
+**Method**: `POST`
+
+  Headers                           
+| Key | Value                         | 
+|------------------|------------------|
+| Content-Type  | application/json    | 
 
 
+```json
+{
+    "email": "a@a.com",
+    "password": "aaa"
+}
+```
 
-# Registration
+This method will return a access token which can be further used to make API calls.
+
+### Schedule Job '/schedule'
+
+**Method**: `POST`
+
+  Headers                           
+| Key | Value                         | 
+|------------------|------------------|
+| Content-Type  | application/json    | 
+| Authorization | Bearer {token}      |
+
+```json
+{
+    "script": "node x.js",
+    "startTime": "17:55", // This takes UTC time as input in 24h format
+    "executeAgainAfter": "1d", // This can take input like 1d 5h 4m 3s or 4h 3s or 4s as long as it follows d,h,m,s serial 
+    "times": 5  // The number of times we want out task to execute
+}
+```
+### Cancel Job '/cancel'
+
+**Method**: `PUT`
+
+  Headers                           
+| Key | Value                         | 
+|------------------|------------------|
+| Content-Type  | application/json    | 
+| Authorization | Bearer {token}      |
+
+```json
+{
+    "id": 36    // id here is the job id which the user wants to cance;
+}
+```
+
+### Reschedule Job '/reschedule'
+
+**Method**: `PUT`
+
+  Headers                           
+| Key | Value                         | 
+|------------------|------------------|
+| Content-Type  | application/json    | 
+| Authorization | Bearer {token}      |
+
+```json
+{
+    "id": 123,
+    "startTime": "18;00",
+    "executeAgainAfter": "5s",
+    "timesLeft": 5
+
+}
+```
+
+### Status of Job '/status'
+
+**Method**: `GET`
+
+  Headers                           
+| Key | Value                         | 
+|------------------|------------------|
+| Authorization | Bearer {token}      |
