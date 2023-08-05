@@ -55,10 +55,21 @@ The postman collection for the API's can be imported from the json stored in the
 
 **Method**: `POST`
 
-|   Headers                           |
+  Headers                           
 | Key | Value                         | 
 |------------------|------------------|
 | Content-Type  | application/json    | 
+
+Body Parameters:
+
+```json
+{
+    "name": "ujas",
+    "email": "test@test.com",
+    "password": "password"
+}
+```
+
 
 
 
