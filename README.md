@@ -45,6 +45,21 @@ The server will start and we are good to go.
 
 The base URL for all API endpoints is: `http://localhost:3002`
 
+### POSTMAN
+
+The postman collection for the API's can be imported from the json stored in the Collection folder
+
 ## API Specification
+
+### Register '/register'
+
+**Method**: `POST`
+
+| Column 1 Heading | Column 2 Heading | Column 3 Heading |
+|------------------|------------------|------------------|
+| Row 1, Column 1  | Row 1, Column 2  | Row 1, Column 3  |
+| Row 2, Column 1  | Row 2, Column 2  | Row 2, Column 3  |
+| Row 3, Column 1  | Row 3, Column 2  | Row 3, Column 3  |
+
 
 # Registration
