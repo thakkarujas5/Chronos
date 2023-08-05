@@ -51,7 +51,7 @@ The postman collection for the API's can be imported from the json stored in the
 
 ## API Specification
 
-### Register '/register'
+### 1) Register '/register'
 
 **Method**: `POST`
 
@@ -70,7 +70,7 @@ Body Parameters:
 }
 ```
 
-### Login '/login'
+### 2) Login '/login'
 
 **Method**: `POST`
 
@@ -89,7 +89,7 @@ Body Parameters:
 
 This method will return a access token which can be further used to make API calls.
 
-### Schedule Job '/schedule'
+### 3) Schedule Job '/schedule'
 
 **Method**: `POST`
 
@@ -107,7 +107,7 @@ This method will return a access token which can be further used to make API cal
     "times": 5  // The number of times we want out task to execute
 }
 ```
-### Cancel Job '/cancel'
+### 4) Cancel Job '/cancel'
 
 **Method**: `PUT`
 
@@ -123,7 +123,7 @@ This method will return a access token which can be further used to make API cal
 }
 ```
 
-### Reschedule Job '/reschedule'
+### 5) Reschedule Job '/reschedule'
 
 **Method**: `PUT`
 
@@ -143,7 +143,7 @@ This method will return a access token which can be further used to make API cal
 }
 ```
 
-### Status of Job '/status'
+### 6) Status of Job '/status'
 
 **Method**: `GET`
 
