@@ -15,10 +15,35 @@ Create a database in your system and navigate to db folder where there will be d
 
 Install docker on your system and run the following commands to run Redis and RabbitMQ
 
+For Redis
+
 ```bash
 docker run --name my-redis -p 6379:6379 -d redis
 ```
 
+For RabbitMQ
+
+```bash
+docker run --name rabbitmq -p 5672:5672 rabbitmq
+```
+
+After this inside your repo on your local machine run the following command
+
+```bash
+npm install
+```
+This will install all the necessary dependencies for the project.
+
+After this run
+
+```bash
+npm start
+```
+The server will start and we are good to go.
+
+### Base URL
+
+The base URL for all API endpoints is: `http://localhost:3002`
 
 ## API Specification
 
