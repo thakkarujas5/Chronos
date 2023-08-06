@@ -148,8 +148,10 @@ async function connectToRabbitMQ() {
                     
                     channel.ack(message);
 
+                    const upjob = await Job.findByPk(json.id);
+
                     const job = await Job.update({
-                        timesLeft: json.timesLeft - 1,
+                        timesLeft: upjob.dataValues.timesLeft - 1,
                         status: 'executing'
                     }, {
                         where: {

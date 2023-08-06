@@ -73,7 +73,7 @@ async function schedule(req, res) {
         }
         else{
 
-            addJobwithDelay(data.dataValues.id, channel, data.dataValues, del/1000);
+            addJobwithDelay(data.dataValues.id, channel, data.dataValues, 1);
         }
 
         

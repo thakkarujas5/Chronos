@@ -4,6 +4,7 @@ const Ajv = require('ajv');
 const ajv = new Ajv({ allErrors: true }); 
 const cancelSchema = require('../schemas/cancel')
 const validateCancel = ajv.compile(cancelSchema)
+const UserJob = require('../models/userjob')
 
 async function cancel(req, res) {
 
@@ -22,6 +23,19 @@ async function cancel(req, res) {
         });
     }
 
+    const id = req.user.id;
+
+    const job = await UserJob.findAll({
+        where: {
+            jobid: req.body.id
+        }
+    })
+    if(id != job[0].dataValues.userid)
+    {
+        return res.status(500).json({
+            message:"You are not authorized to perform this action."
+        })
+    }
     const cancelledJob = Job.update({
         status: 'cancelled'
     }, {

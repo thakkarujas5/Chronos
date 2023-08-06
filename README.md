@@ -41,6 +41,10 @@ npm start
 ```
 The server will start and we are good to go.
 
+For the first time uncomment the syncDatabase function on line 61 of app.js which will do the database migrations.
+
+Once the database has been migrated uncomment it and restart the server.
+
 ### Base URL
 
 The base URL for all API endpoints is: `http://localhost:3002`
