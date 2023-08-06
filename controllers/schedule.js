@@ -55,8 +55,7 @@ async function schedule(req, res) {
         })
 
         const del = getMillisecondsDifference(startTime)
-        //   console.log(del/1000);
-   //     console.log(del)
+
 
         const logupdate = await executionLog.create({
             jobId: data.dataValues.id,
@@ -73,7 +72,7 @@ async function schedule(req, res) {
         }
         else{
 
-            addJobwithDelay(data.dataValues.id, channel, data.dataValues, 1);
+            addJobwithDelay(data.dataValues.id, channel, data.dataValues, del / 1000);
         }
 
         

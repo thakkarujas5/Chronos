@@ -46,7 +46,7 @@ async function reschedule (req,res) {
 
     const jobinfo = await Job.findByPk(jobid);
    
-    addJobwithDelay(jobid, channelR, jobinfo.dataValues, 1);
+    addJobwithDelay(jobid, channelR, jobinfo.dataValues, del / 1000);
 
     return res.status(200).json({
         message: "Job rescheduled successfully"
