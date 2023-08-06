@@ -6,6 +6,11 @@ const parseMilliseconds = require('../utils/parseMilli')
 const addJobwithDelay = require('../utils/addJobWithDelay');
 const UserJob = require('../models/userjob');
 const executionLog = require('../models/executionlog')
+const instantTask = require('../utils/instantTask')
+const Ajv = require('ajv');
+const ajv = new Ajv({ allErrors: true }); 
+const scheduleSchema = require('../schemas/schedule')
+const validateSchedule = ajv.compile(scheduleSchema)
 
 const channel = "my_sorted_set";
 
@@ -18,6 +23,20 @@ async function schedule(req, res) {
         executeAgainAfter,
         times
     } = req.body;
+
+    const valid = validateSchedule(req.body);
+
+    if (!valid) {
+        const errors = validateSchedule.errors.map((error) => {
+            return {
+                field: error.dataPath,
+                message: error.message
+            };
+        });
+        return res.status(400).json({
+            errors
+        });
+    }
 
     const nexexec = timeInMilliseconds(startTime) + parseMilliseconds(executeAgainAfter);
 
@@ -37,6 +56,7 @@ async function schedule(req, res) {
 
         const del = getMillisecondsDifference(startTime)
         //   console.log(del/1000);
+   //     console.log(del)
 
         const logupdate = await executionLog.create({
             jobId: data.dataValues.id,
@@ -45,9 +65,18 @@ async function schedule(req, res) {
             log: 'Scheduled the job sucessfully'
         })
 
-        addJobwithDelay(data.dataValues.id, channel, data.dataValues, 1);
+        if(del === 0) {
 
+            instantTask(data.dataValues)
 
+            addJobwithDelay(data.dataValues.id, channel, data.dataValues, data.dataValues.executeAgainAfter / 1000)
+        }
+        else{
+
+            addJobwithDelay(data.dataValues.id, channel, data.dataValues, del/1000);
+        }
+
+        
 
         res.status(200).json({
             success: true,

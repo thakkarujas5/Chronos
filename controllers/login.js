@@ -2,6 +2,10 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/user')
+const Ajv = require('ajv');
+const ajv = new Ajv({ allErrors: true }); 
+const loginSchema = require('../schemas/login')
+const validateLogin = ajv.compile(loginSchema)
 
 
 //const secretKey = process.env.JWT_SECRET;
@@ -11,6 +15,20 @@ async function loginUser(req, res)  {
         email,
         password
     } = req.body;
+
+    const valid = validateLogin(req.body);
+
+    if (!valid) {
+        const errors = validateLogin.errors.map((error) => {
+            return {
+                field: error.dataPath,
+                message: error.message
+            };
+        });
+        return res.status(400).json({
+            errors
+        });
+    }
 
     // Find the user by email
     const user = await User.findOne({

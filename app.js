@@ -16,12 +16,14 @@ const loginRoute = require('./routes/login')
 const scheduleRoute = require('./routes/schedule')
 const cancelRoute = require('./routes/cancel')
 const statusRoute = require('./routes/jobstatus')
+const rescheduleRoute = require('./routes/reschedule')
 const sequelize = require('./db/db')
 const sub = require('./redis/sub')
 const extractNumbersFromString = require('./utils/extractNumber')
 const addJobwithDelay = require('./utils/addJobWithDelay')
 const syncDatabase = require('./db/sync')
 const taskExecutor = require('./utils/executor')
+const getMillisecondsDifference = require('./utils/getMilliSecond')
 
 
 const app = express()
@@ -70,6 +72,7 @@ app.use('/', loginRoute)
 app.use('/', scheduleRoute)
 app.use('/', cancelRoute)
 app.use('/', statusRoute)
+app.use('/', rescheduleRoute)
 
 
 
@@ -91,7 +94,7 @@ async function handleExpiredEvent(key) {
     }
 }
 
-
+// Receive expired events from Redis
 sub.on("message", async (channel, key) => {
 
     const id = extractNumbersFromString(key);
@@ -120,7 +123,7 @@ async function connectToRabbitMQ() {
             durable: true
         });
 
-
+        // Consume messages from RabbitMQ
         channel.consume(queuename, async (message) => {
             if (message) {
 
@@ -141,23 +144,8 @@ async function connectToRabbitMQ() {
 
                     channel.ack(message);
                     console.log('Job cancelled:', jobinfo.dataValues.id)
-                } else if (jobinfo.dataValues.status === 'rescheduled') {
-
-                    channel.ack(message);
-                    const del = getMillisecondsDifference(jobinfo.dataValues.startTime)
-
-                    const jobupdate = Job.update({
-                        status: 'started'
-                    }, {
-                        where: {
-                            id: jobinfo.dataValues.id
-                        }
-                    })
-
-                    addJobwithDelay(jobinfo.dataValues.id, channelR, data.dataValues, del / 1000);
                 } else {
-                    //    console.log('Received message:', json);
-                    //   console.log(json.id, json.timesLeft)
+                    
                     channel.ack(message);
 
                     const job = await Job.update({
